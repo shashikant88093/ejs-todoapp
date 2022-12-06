@@ -7,13 +7,19 @@
     <title>Document</title>
 </head>
 <body>
-    <% if(kindOfDay === "Saturday" || kindOfDay === "Sunday"){ %>
+    <h1 ><%= kindOfDay %> ToDo List</h1>
+             <% for (let i=0; i<listData?.length;i++){ %> 
+                <div class="item">
+                    <input type="checkbox">
+                    <p><%= listData[i] %></p> 
 
-    
-    <h1 style="color:purple"><%= kindOfDay %> ToDo List</h1>
-   <% }else{ %>
-    <h1 style="color:blue"><%= kindOfDay %> ToDo List</h1>
-    
-<% } %>
+                </div>
+            <% } %>  
+    <form class="" action="/" method="post">
+        <input type="text" name="todo"/>
+        <button type="submit" name="button" >Add</button>
+
+    </form>
+ 
 </body>
 </html>
