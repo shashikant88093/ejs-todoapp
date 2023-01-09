@@ -9,11 +9,14 @@
 <body>
     <h1 ><%= kindOfDay %> ToDo List</h1>
              <% for (let i=0; i<listData?.length;i++){ %> 
-                <div class="item">
-                    <input type="checkbox">
-                    <p><%= listData[i] %></p> 
-
-                </div>
+                <form action="/delete" method="post">
+                    <div class="item">
+                        <input type="checkbox" name="checkbox" value="<%= listData[i]._id %> " onchange="this.form.submit()">
+                        <p><%= listData[i].name %></p> 
+    
+                    </div>
+                </form>
+              
             <% } %>  
     <form class="" action="/" method="post">
         <input type="text" name="todo"/>

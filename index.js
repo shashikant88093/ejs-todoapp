@@ -1,10 +1,12 @@
 const express = require("express");
 const bodyParser = require("body-parser");
+const mongoose = require("mongoose");
+mongoose.connect("mongodb://localhost:27017/todolistDB", { useNewUrlParser: true, useUnifiedTopology: true });
+
 const app = express();
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"))
-let lists = ['Buy Food','Cook Food','Eat Food']
 app.get("/", (req, res) => {
   let today = new Date();
   let options = {
@@ -14,13 +16,49 @@ app.get("/", (req, res) => {
     year:"numeric"
   }
   var day = today.toLocaleDateString('en-US',options)
-  res.render("list",{kindOfDay:day,listData:lists})
+  //get form db
+  Item.find({},(err,foundItems)=>{
+    if(err){
+      console.log(err);
+    }else{
+      console.log(foundItems);
+      res.render("list",{kindOfDay:day,listData:foundItems})
+    }
+  })
+  // res.render("list",{kindOfDay:day,listData:lists})
 });
+const itemsSchema = new mongoose.Schema({
+  name: String
+});
+const Item = mongoose.model("Item", itemsSchema);
 app.post("/",(req, res)=>{
    let list = req.body.todo
-   lists.push(list)
+   Item.insertMany({name:list},(err)=>{
+      if(err){
+        console.log(err);
+      }else{
+        console.log("Successfully added");
+      
   res.redirect("/")
+      }
+    })
+   
 })
+app.post("/delete",(req,res)=>{
+  const id = req.body.checkbox.trim();
+  console.log(req.body.checkbox);
+  Item.findByIdAndRemove(id,(err)=>{
+
+    if(err){
+      console.log(err);
+    }else{
+      console.log("Successfully deleted");
+      res.redirect("/")
+    }
+  })
+}
+)
+
 app.listen(8000, (req, res) => {
   console.log("App is running on the port 8000");
 });
