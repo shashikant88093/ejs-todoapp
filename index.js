@@ -1,7 +1,12 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
-mongoose.connect("mongodb://localhost:27017/todolistDB", { useNewUrlParser: true, useUnifiedTopology: true });
+const dotenv = require("dotenv");
+dotenv.config();
+console.log(process.env.MONGODBURL,"ccccv");
+mongoose.connect(process.env.MONGODBURL, {
+  useNewUrlParser: false,
+});
 
 const app = express();
 app.set("view engine", "ejs");
